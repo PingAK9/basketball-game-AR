@@ -1,2 +1,3 @@
-# basketball-game-AR
-Basketball Game AR
+## basketball game AR
+- Unity 7.3.2
+- Vuforia
