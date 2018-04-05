@@ -103,6 +103,7 @@ public class StaticTrackableEventHandler : MonoBehaviour, ITrackableEventHandler
         // Disable canvas':
         foreach (var component in canvasComponents)
             component.enabled = false;
+        GameControl.Instance.ResetGame();
     }
 
     #endregion // PRIVATE_METHODS

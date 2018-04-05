@@ -20,13 +20,35 @@ public class BallControl : MonoBehaviour
     {
         float _distance = Vector3.Distance(posEnd, posBegin);
         _distance = 1.5f + _distance / 400;
-        GameControl.Instance.txtDistance.text = "Distance: " + _distance.ToString();
         GameControl.Instance.OnThown();
         rigid.velocity = new Vector3(0, 1, 1) * _distance;
 
         rigid.isKinematic = false;
         transform.parent = null;
         Invoke("DestroyBall", timeLive);
+        Invoke("CheckEnter", timeLive - 1);
+    }
+    bool isScore = false;
+    void OnTriggerEnter(Collider collision)
+    {
+        if (isScore == false)
+        {
+            if (collision.gameObject.name == "Basket")
+            {
+                isScore = true;
+                AudioManager.OnPlayWin();
+                GameControl.Instance.OnScore();
+            }
+        }
+
+    }
+    void CheckEnter()
+    {
+        if (isScore == false)
+        {
+            AudioManager.OnPlayLose();
+            GameControl.Instance.ResetGame();
+        }
     }
     void DestroyBall()
     {
@@ -41,13 +63,11 @@ public class BallControl : MonoBehaviour
             if (Input.GetMouseButton(0))
             {
                 posEnd = Input.mousePosition;
-                GameControl.Instance.txtEnd.text = "Pos End: " + posEnd.ToString();
             }
 #else
             if (Input.touchCount > 0)
             {
                 posEnd = Input.touches[0].position;
-                GameControl.Instance.txtEnd.text = "Pos End: " + posEnd.ToString();
             }
 #endif
         }
@@ -62,7 +82,6 @@ public class BallControl : MonoBehaviour
         {
             isTouch = true;
             posBegin = GetPosTouch();
-            GameControl.Instance.txtBegin.text = "Pos Begin: " + posBegin.ToString();
         }
     }
 
